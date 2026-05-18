@@ -25,6 +25,23 @@ Diese Repository-Struktur passt zum OOP-Projekt (WiSe 2025/2026) mit:
 |-- src/graph.cpp
 |-- tests/test_graph.cpp
 `-- examples/basic_usage.cpp
+`-- examples/graphviz_export.cpp
+
+## Team & Aufgabenaufteilung (Vorschlag für 3 Personen)
+
+Die Arbeit lässt sich gut auf drei Personen aufteilen. Beispielzuweisung (passt ihr an):
+
+- **Person A — Core / Datenstrukturen**: Implementiert und pflegt `include/graph/*` und `src/` (`UndirectedGraph`, `DirectedGraph`, Basisinvarianten).
+- **Person B — Algorithmen**: Implementiert und erweitert Algorithmen in `include/graph/` (`Traversal`, `Dijkstra`, `Kruskal`, `TopologicalSort`) und schreibt dazu Beispiele.
+- **Person C — Tests, CI & Dokumentation**: Schreibt Tests in `tests/`, pflegt `README.md`, `CONTRIBUTING.md`, erzeugt Visualisierungen und richtet CI ein.
+
+Branches (pro Person):
+
+- `feature/core-<name>`
+- `feature/algorithms-<name>`
+- `feature/tests-docs-<name>`
+
+Nutzt Issues mit dem Template `ISSUE_TEMPLATE/task.md` und verbindet PRs mit Issues.
 ```
 
 ## Abgedeckte Graph-Typen
@@ -54,6 +71,27 @@ ctest --test-dir build --output-on-failure
 ```bash
 ./build/graph_basic_example
 ```
+
+## Graphen visualisieren (Graphviz)
+
+DOT-Dateien fuer alle vier Graph-Typen erzeugen:
+
+```bash
+./build/graph_graphviz_example
+```
+
+Danach koennen SVG oder PNG gerendert werden:
+
+```bash
+dot -Tsvg graphviz_out/undirected.dot -o graphviz_out/undirected.svg
+dot -Tpng graphviz_out/undirected.dot -o graphviz_out/undirected.png
+```
+
+Analog fuer:
+
+- `graphviz_out/directed.dot`
+- `graphviz_out/weighted_undirected.dot`
+- `graphviz_out/weighted_directed.dot`
 
 ## Einbindung in andere CMake-Projekte
 

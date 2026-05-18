@@ -40,6 +40,9 @@ install(EXPORT GraphTargets
 if(GRAPH_BUILD_EXAMPLES)
     add_executable(graph_basic_example examples/basic_usage.cpp)
     target_link_libraries(graph_basic_example PRIVATE Graph::Graph)
+
+    add_executable(graph_graphviz_example examples/graphviz_export.cpp)
+    target_link_libraries(graph_graphviz_example PRIVATE Graph::Graph)
 endif()
 
 if(GRAPH_BUILD_TESTS)
