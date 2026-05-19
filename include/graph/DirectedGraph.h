@@ -1,9 +1,10 @@
 #pragma once
+// Author: Person A
+// Gerichteter Graph OHNE Gewichte.
+// Kante u→v bedeutet NICHT automatisch v→u.
 
-#include "graph/Graph.h"
-
+#include "Graph.h"
 #include <algorithm>
-#include <vector>
 
 namespace graph {
 
@@ -12,34 +13,25 @@ public:
     explicit DirectedGraph(int vertices)
         : Graph(vertices), adjList(vertices), edgeCount(0) {}
 
+    // Kante nur in eine Richtung: u --> v
     void addEdge(int u, int v) {
-        validateVertex(u);
-        validateVertex(v);
-        if (hasEdge(u, v)) {
-            return;
-        }
+        validateVertex(u); validateVertex(v);
+        if (hasEdge(u, v)) return;
         adjList[u].push_back(v);
         ++edgeCount;
     }
 
     void removeEdge(int u, int v) {
-        validateVertex(u);
-        validateVertex(v);
-
+        validateVertex(u); validateVertex(v);
         auto& list = adjList[u];
         auto it = std::find(list.begin(), list.end(), v);
-        if (it == list.end()) {
-            return;
-        }
-        list.erase(it);
-        --edgeCount;
+        if (it != list.end()) { list.erase(it); --edgeCount; }
     }
 
     bool hasEdge(int u, int v) const override {
-        validateVertex(u);
-        validateVertex(v);
-        const auto& neighbors = adjList[u];
-        return std::find(neighbors.begin(), neighbors.end(), v) != neighbors.end();
+        validateVertex(u); validateVertex(v);
+        auto& nb = adjList[u];
+        return std::find(nb.begin(), nb.end(), v) != nb.end();
     }
 
     std::vector<int> getNeighbors(int u) const override {
@@ -47,31 +39,22 @@ public:
         return adjList[u];
     }
 
-    int getNumEdges() const override { return edgeCount; }
-
+    int getNumEdges()    const override { return edgeCount; }
+    int getOutDegree(int u) const { validateVertex(u); return (int)adjList[u].size(); }
     int getInDegree(int v) const {
         validateVertex(v);
         int count = 0;
-        for (int u = 0; u < numVertices; ++u) {
-            if (hasEdge(u, v)) {
-                ++count;
-            }
-        }
+        for (int u = 0; u < numVertices; ++u)
+            if (hasEdge(u, v)) ++count;
         return count;
     }
 
-    int getOutDegree(int u) const {
-        validateVertex(u);
-        return static_cast<int>(adjList[u].size());
-    }
-
+    // Transponierten Graphen erstellen (alle Pfeile umkehren)
     DirectedGraph transpose() const {
         DirectedGraph t(numVertices);
-        for (int u = 0; u < numVertices; ++u) {
-            for (int v : adjList[u]) {
+        for (int u = 0; u < numVertices; ++u)
+            for (int v : adjList[u])
                 t.addEdge(v, u);
-            }
-        }
         return t;
     }
 
@@ -80,4 +63,4 @@ private:
     int edgeCount;
 };
 
-}  // namespace graph
+} // namespace graph
